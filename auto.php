@@ -15,23 +15,25 @@ if ($data->event_type !== 'push') {
 }
 
 // Check if the repository matches your configuration
-// https://github.com/lazydesigner/goa.callgirlsinlucknow.in.git
 $repository = $data->repository->full_name;
-if ($repository !== 'lazydesigner/goa.callgirlsinlucknow.in.git') {
+if ($repository !== 'lazydesigner/lazy_navbar.git') {
   http_response_code(204);
   exit('Repository not supported');
 }
 
+// Update these paths accordingly
+$homeDirectory = '/home/vol4_3/infinityfree.com/if0_35857587';
+$repoPath = "{$homeDirectory}/lazy_navbar"; // Updated to match your GitHub repository name
+$webPath = "{$homeDirectory}/htdocs";
+
 // Clone the repository or pull changes if already exists
-$repoPath = '<full_path_to_repository_on_server>';
 if (!file_exists($repoPath)) {
-  shell_exec("git clone https://github.com/lazydesigner/goa.callgirlsinlucknow.in.git {$repoPath}");
+  shell_exec("git clone https://github.com/lazydesigner/lazy_navbar.git {$repoPath}");
 } else {
   shell_exec("cd {$repoPath} && git pull");
 }
 
 // Copy the files to your web directory
-$webPath = '<full_path_to_web_directory_on_server>';
 if (file_exists("{$repoPath}/public")) {
   shell_exec("rm -rf {$webPath}/* && cp -r {$repoPath}/public/* {$webPath}/");
 } else {
@@ -42,4 +44,3 @@ if (file_exists("{$repoPath}/public")) {
 http_response_code(200);
 echo 'Deployment successful';
 ?>
-
